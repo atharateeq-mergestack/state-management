@@ -27,7 +27,7 @@ function Editor() {
                         <button className="px-3 py-1 bg-gray-800 text-white rounded" onClick={() => stateController.updateState({ counter: (counter ?? 0) + 1, lastUpdated: new Date().toISOString() })}>+1</button>
                     </div>
                 </div>
-                {/* Theme removed */}
+
                 <div className="space-y-2">
                     <div className="font-semibold text-gray-700">Todos</div>
                     <div className="space-y-2">
@@ -71,7 +71,6 @@ function Viewer() {
                     <div className="font-semibold">Counter</div>
                     <div>{snapshot.counter}</div>
                 </div>
-                {/* Theme removed */}
                 <div>
                     <div className="font-semibold">Todos</div>
                     <ul className="list-disc list-inside">

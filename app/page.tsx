@@ -5,7 +5,6 @@ import { TwoPaneUseStateDemo } from '../components/TwoPaneUseStateDemo';
 import { TwoPaneUseScopeStateDemo } from '../components/TwoPaneUseScopeStateDemo';
 import { TwoPaneGetValueDemo } from '../components/TwoPaneGetValueDemo';
 import { TwoPaneGetValuesDemo } from '../components/TwoPaneGetValuesDemo';
-// Removed other demos per request
 
 export default function StateManagementDemo() {
   const [selected, setSelected] = useState<string | null>(null);
@@ -70,55 +69,8 @@ export default function StateManagementDemo() {
               <TwoPaneGetValuesDemo />
             </section>
           )}
-
-          {/* Only three demos retained */}
         </div>
 
-        {/* Footer */}
-        <footer className="mt-16 text-center">
-          <div className="bg-white rounded-lg shadow-lg border p-8">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              StateController Features Summary
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
-              <div>
-                <h3 className="font-semibold text-gray-800 mb-2">Reactive Hooks</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• useState(keys[]) - Subscribe to multiple keys</li>
-                  <li>• useScopeState(key) - Single key with setter</li>
-                  <li>• useHydration(data) - Merge server state</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 mb-2">Non-Reactive Access</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• getValue(key) - Get single value</li>
-                  <li>• getValues(keys[]) - Get multiple values</li>
-                  <li>• setState(data) - Replace state</li>
-                  <li>• updateState(data) - Merge state</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 mb-2">Reset & Subscribe</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• resetState(key) - Reset single key</li>
-                  <li>• resetStates(keys[]) - Reset multiple keys</li>
-                  <li>• resetAll() - Reset entire state</li>
-                  <li>• subscribe(key, listener) - Manual watching</li>
-                </ul>
-              </div>
-            </div>
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <p className="text-blue-800">
-                <strong>Built with:</strong> Zustand, React, TypeScript, Next.js, Tailwind CSS
-              </p>
-              <p className="text-blue-700 text-sm mt-2">
-                This library provides a consistent API for state management that can be easily extended
-                to support other state management solutions like Redux, Jotai, or Valtio.
-              </p>
-            </div>
-          </div>
-        </footer>
       </div>
     </div>
   );

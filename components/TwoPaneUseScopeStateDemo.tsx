@@ -29,8 +29,6 @@ function Editor() {
                     </div>
                 </div>
 
-                {/* Theme removed */}
-
                 <div className="space-y-2">
                     <div className="font-semibold text-gray-700">Todos</div>
                     <div className="space-y-2">
@@ -64,7 +62,7 @@ function Viewer() {
                     <div className="font-semibold">Counter</div>
                     <div>{counter}</div>
                 </div>
-                {/* Theme removed */}
+
                 <div>
                     <div className="font-semibold">Todos</div>
                     <ul className="list-disc list-inside">
