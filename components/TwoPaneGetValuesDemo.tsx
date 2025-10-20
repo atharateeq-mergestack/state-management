@@ -1,13 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { StateController } from '../lib/zustand-state-controller';
-import { DemoState, initialDemoState } from '../lib/demo-state';
-
-const stateController = new StateController<DemoState>(initialDemoState, 'TwoPaneGetValuesController');
+import { demoController as stateController, addTodo, toggleTodo } from '../lib/demo-state';
+import type { DemoState } from '../lib/demo-state';
 
 function Editor() {
-    const { user, counter, theme, todos } = stateController.useState(['user', 'counter', 'theme', 'todos']);
+    const { user, counter, todos } = stateController.useState(['user', 'counter', 'todos']);
 
     return (
         <div className="p-6 bg-white rounded-lg shadow-lg border h-full">
@@ -29,20 +27,17 @@ function Editor() {
                         <button className="px-3 py-1 bg-gray-800 text-white rounded" onClick={() => stateController.updateState({ counter: (counter ?? 0) + 1, lastUpdated: new Date().toISOString() })}>+1</button>
                     </div>
                 </div>
-                <div className="space-y-2">
-                    <div className="font-semibold text-gray-700">Theme</div>
-                    <button className="px-4 py-2 bg-purple-600 text-white rounded" onClick={() => stateController.updateState({ theme: theme === 'light' ? 'dark' : 'light', lastUpdated: new Date().toISOString() })}>Toggle Theme (current: {theme})</button>
-                </div>
+                {/* Theme removed */}
                 <div className="space-y-2">
                     <div className="font-semibold text-gray-700">Todos</div>
                     <div className="space-y-2">
                         {todos?.map(t => (
                             <div key={t.id} className="flex items-center gap-2">
-                                <input type="checkbox" checked={t.completed} onChange={() => stateController.updateState({ todos: todos.map(td => td.id === t.id ? { ...td, completed: !td.completed } : td), lastUpdated: new Date().toISOString() })} />
+                                <input type="checkbox" checked={t.completed} onChange={() => toggleTodo(t.id)} />
                                 <span className={t.completed ? 'line-through text-gray-500' : ''}>{t.text}</span>
                             </div>
                         ))}
-                        <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={() => stateController.updateState({ todos: [...(todos ?? []), { id: Date.now().toString(), text: `Todo ${(todos?.length ?? 0) + 1}`, completed: false }], lastUpdated: new Date().toISOString() })}>Add Todo</button>
+                        <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={() => addTodo()}>Add Todo</button>
                     </div>
                 </div>
             </div>
@@ -51,16 +46,15 @@ function Editor() {
 }
 
 function Viewer() {
-    const [snapshot, setSnapshot] = useState(() => stateController.getValues(['user', 'counter', 'theme', 'todos', 'lastUpdated']) as {
+    const [snapshot, setSnapshot] = useState(() => stateController.getValues(['user', 'counter', 'todos', 'lastUpdated']) as {
         user: DemoState['user'];
         counter: number;
-        theme: DemoState['theme'];
         todos: DemoState['todos'];
         lastUpdated: string;
     });
 
     const refresh = () => {
-        setSnapshot(stateController.getValues(['user', 'counter', 'theme', 'todos', 'lastUpdated']) as any);
+        setSnapshot(stateController.getValues(['user', 'counter', 'todos', 'lastUpdated']) as any);
     };
 
     return (
@@ -77,14 +71,11 @@ function Viewer() {
                     <div className="font-semibold">Counter</div>
                     <div>{snapshot.counter}</div>
                 </div>
-                <div>
-                    <div className="font-semibold">Theme</div>
-                    <div>{snapshot.theme}</div>
-                </div>
+                {/* Theme removed */}
                 <div>
                     <div className="font-semibold">Todos</div>
                     <ul className="list-disc list-inside">
-                        {snapshot.todos.map(t => (<li key={t.id} className={t.completed ? 'line-through text-gray-500' : ''}>{t.text}</li>))}
+                        {snapshot.todos.map((t) => (<li key={t.id} className={t.completed ? 'line-through text-gray-500' : ''}>{t.text}</li>))}
                     </ul>
                 </div>
                 <div className="text-sm text-gray-500">Last updated: {snapshot.lastUpdated}</div>

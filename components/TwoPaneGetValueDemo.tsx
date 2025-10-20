@@ -1,13 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { StateController } from '../lib/zustand-state-controller';
-import { DemoState, initialDemoState } from '../lib/demo-state';
-
-const stateController = new StateController<DemoState>(initialDemoState, 'TwoPaneGetValueController');
+import { demoController as stateController, addTodo, toggleTodo } from '../lib/demo-state';
 
 function Editor() {
-    const { user, counter, theme, todos } = stateController.useState(['user', 'counter', 'theme', 'todos']);
+    const { user, counter, todos } = stateController.useState(['user', 'counter', 'todos']);
 
     return (
         <div className="p-6 bg-white rounded-lg shadow-lg border h-full">
@@ -47,28 +44,20 @@ function Editor() {
                     </div>
                 </div>
 
-                <div className="space-y-2">
-                    <div className="font-semibold text-gray-700">Theme</div>
-                    <button
-                        className="px-4 py-2 bg-purple-600 text-white rounded"
-                        onClick={() => stateController.updateState({ theme: theme === 'light' ? 'dark' : 'light', lastUpdated: new Date().toISOString() })}
-                    >
-                        Toggle Theme (current: {theme})
-                    </button>
-                </div>
+                {/* Theme removed */}
 
                 <div className="space-y-2">
                     <div className="font-semibold text-gray-700">Todos</div>
                     <div className="space-y-2">
                         {todos?.map(t => (
                             <div key={t.id} className="flex items-center gap-2">
-                                <input type="checkbox" checked={t.completed} onChange={() => stateController.updateState({ todos: todos.map(td => td.id === t.id ? { ...td, completed: !td.completed } : td), lastUpdated: new Date().toISOString() })} />
+                                <input type="checkbox" checked={t.completed} onChange={() => toggleTodo(t.id)} />
                                 <span className={t.completed ? 'line-through text-gray-500' : ''}>{t.text}</span>
                             </div>
                         ))}
                         <button
                             className="px-4 py-2 bg-blue-600 text-white rounded"
-                            onClick={() => stateController.updateState({ todos: [...(todos ?? []), { id: Date.now().toString(), text: `Todo ${(todos?.length ?? 0) + 1}`, completed: false }], lastUpdated: new Date().toISOString() })}
+                            onClick={() => addTodo()}
                         >
                             Add Todo
                         </button>
@@ -83,7 +72,6 @@ function Viewer() {
     const [snapshot, setSnapshot] = useState(() => ({
         user: stateController.getValue('user'),
         counter: stateController.getValue('counter'),
-        theme: stateController.getValue('theme'),
         todos: stateController.getValue('todos'),
         lastUpdated: stateController.getValue('lastUpdated'),
     }));
@@ -92,7 +80,6 @@ function Viewer() {
         setSnapshot({
             user: stateController.getValue('user'),
             counter: stateController.getValue('counter'),
-            theme: stateController.getValue('theme'),
             todos: stateController.getValue('todos'),
             lastUpdated: stateController.getValue('lastUpdated'),
         });
@@ -112,10 +99,7 @@ function Viewer() {
                     <div className="font-semibold">Counter</div>
                     <div>{snapshot.counter}</div>
                 </div>
-                <div>
-                    <div className="font-semibold">Theme</div>
-                    <div>{snapshot.theme}</div>
-                </div>
+                {/* Theme removed */}
                 <div>
                     <div className="font-semibold">Todos</div>
                     <ul className="list-disc list-inside">

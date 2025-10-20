@@ -7,7 +7,6 @@ export interface DemoState {
     age: number;
   };
   counter: number;
-  theme: 'light' | 'dark';
   todos: Array<{
     id: string;
     text: string;
@@ -27,7 +26,6 @@ export const initialDemoState: DemoState = {
     age: 30,
   },
   counter: 0,
-  theme: 'light',
   todos: [
     { id: '1', text: 'Learn Zustand', completed: false },
     { id: '2', text: 'Build demo app', completed: false },
@@ -38,3 +36,26 @@ export const initialDemoState: DemoState = {
   },
   lastUpdated: new Date().toISOString(),
 };
+
+// Centralized controller and helpers for demos
+import { StateController } from './zustand-state-controller';
+
+export const demoController = new StateController<DemoState>(initialDemoState, 'DemoStateController');
+
+export function addTodo(text?: string) {
+  const todos = demoController.getValue('todos');
+  const newTodo = {
+    id: Date.now().toString(),
+    text: text ?? `Todo ${todos.length + 1}`,
+    completed: false,
+  };
+  demoController.updateState({ todos: [...todos, newTodo], lastUpdated: new Date().toISOString() });
+}
+
+export function toggleTodo(id: string) {
+  const todos = demoController.getValue('todos');
+  demoController.updateState({
+    todos: todos.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)),
+    lastUpdated: new Date().toISOString(),
+  });
+}
