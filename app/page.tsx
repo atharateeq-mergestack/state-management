@@ -1,103 +1,149 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+import { UseStateDemo } from '../components/UseStateDemo';
+import { UseScopeStateDemo } from '../components/UseScopeStateDemo';
+import { GetValueDemo } from '../components/GetValueDemo';
+import { UseHydrationDemo, HydrationComponent } from '../components/UseHydrationDemo';
+import { ResetDemo } from '../components/ResetDemo';
+import { SubscriptionDemo } from '../components/SubscriptionDemo';
+
+export default function StateManagementDemo() {
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const demos = [
+    { key: 'useState', title: 'useState(keys[])', description: 'Subscribe to multiple keys' },
+    { key: 'useScopeState', title: 'useScopeState(key)', description: 'Single key with setter' },
+    { key: 'getValue', title: 'getValue / getValues', description: 'Non-reactive accessors' },
+    { key: 'useHydration', title: 'useHydration(data)', description: 'Merge server state' },
+    { key: 'reset', title: 'Reset functions', description: 'Reset one or many keys' },
+    { key: 'subscription', title: 'subscribe(key, listener)', description: 'Manual watching' },
+  ];
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gray-100 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Zustand State Controller Demo
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Pick a card to view a focused demo. Each card renders its component below.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {demos.map((d) => (
+            <button
+              key={d.key}
+              onClick={() => setSelected(d.key)}
+              className={`text-left p-6 bg-white rounded-lg shadow border transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${selected === d.key ? 'ring-2 ring-blue-500' : ''
+                }`}
+            >
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">{d.title}</h3>
+              <p className="text-gray-600">{d.description}</p>
+            </button>
+          ))}
+        </div>
+
+        {/* Selected Demo Renderer */}
+        <div className="mt-12 space-y-12">
+          {selected === 'useState' && (
+            <section>
+              <UseStateDemo />
+            </section>
+          )}
+
+          {selected === 'useScopeState' && (
+            <section>
+              <UseScopeStateDemo />
+            </section>
+          )}
+
+          {selected === 'getValue' && (
+            <section>
+              <GetValueDemo />
+            </section>
+          )}
+
+          {selected === 'useHydration' && (
+            <>
+              <section>
+                <UseHydrationDemo />
+              </section>
+              <section>
+                <div className="p-6 bg-white rounded-lg shadow-lg border">
+                  <h2 className="text-2xl font-bold mb-4 text-gray-800">Auto-Hydration Component</h2>
+                  <p className="text-gray-600 mb-6">
+                    This component automatically hydrates with server data when it mounts.
+                  </p>
+                  <HydrationComponent />
+                </div>
+              </section>
+            </>
+          )}
+
+          {selected === 'reset' && (
+            <section>
+              <ResetDemo />
+            </section>
+          )}
+
+          {selected === 'subscription' && (
+            <section>
+              <SubscriptionDemo />
+            </section>
+          )}
+        </div>
+
+        {/* Footer */}
+        <footer className="mt-16 text-center">
+          <div className="bg-white rounded-lg shadow-lg border p-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              StateController Features Summary
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-2">Reactive Hooks</h3>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• useState(keys[]) - Subscribe to multiple keys</li>
+                  <li>• useScopeState(key) - Single key with setter</li>
+                  <li>• useHydration(data) - Merge server state</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-2">Non-Reactive Access</h3>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• getValue(key) - Get single value</li>
+                  <li>• getValues(keys[]) - Get multiple values</li>
+                  <li>• setState(data) - Replace state</li>
+                  <li>• updateState(data) - Merge state</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-2">Reset & Subscribe</h3>
+                <ul className="text-sm text-gray-600 space-y-1">
+                  <li>• resetState(key) - Reset single key</li>
+                  <li>• resetStates(keys[]) - Reset multiple keys</li>
+                  <li>• resetAll() - Reset entire state</li>
+                  <li>• subscribe(key, listener) - Manual watching</li>
+                </ul>
+              </div>
+            </div>
+            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+              <p className="text-blue-800">
+                <strong>Built with:</strong> Zustand, React, TypeScript, Next.js, Tailwind CSS
+              </p>
+              <p className="text-blue-700 text-sm mt-2">
+                This library provides a consistent API for state management that can be easily extended
+                to support other state management solutions like Redux, Jotai, or Valtio.
+              </p>
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
