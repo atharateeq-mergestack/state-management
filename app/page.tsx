@@ -1,23 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { UseStateDemo } from '../components/UseStateDemo';
-import { UseScopeStateDemo } from '../components/UseScopeStateDemo';
-import { GetValueDemo } from '../components/GetValueDemo';
-import { UseHydrationDemo, HydrationComponent } from '../components/UseHydrationDemo';
-import { ResetDemo } from '../components/ResetDemo';
-import { SubscriptionDemo } from '../components/SubscriptionDemo';
+import { TwoPaneUseStateDemo } from '../components/TwoPaneUseStateDemo';
+import { TwoPaneUseScopeStateDemo } from '../components/TwoPaneUseScopeStateDemo';
+import { TwoPaneGetValueDemo } from '../components/TwoPaneGetValueDemo';
+import { TwoPaneGetValuesDemo } from '../components/TwoPaneGetValuesDemo';
+// Removed other demos per request
 
 export default function StateManagementDemo() {
   const [selected, setSelected] = useState<string | null>(null);
 
   const demos = [
-    { key: 'useState', title: 'useState(keys[])', description: 'Subscribe to multiple keys' },
-    { key: 'useScopeState', title: 'useScopeState(key)', description: 'Single key with setter' },
-    { key: 'getValue', title: 'getValue / getValues', description: 'Non-reactive accessors' },
-    { key: 'useHydration', title: 'useHydration(data)', description: 'Merge server state' },
-    { key: 'reset', title: 'Reset functions', description: 'Reset one or many keys' },
-    { key: 'subscription', title: 'subscribe(key, listener)', description: 'Manual watching' },
+    { key: 'useState', title: 'useState(keys[])', description: 'Reactive two-pane demo' },
+    { key: 'useScopeState', title: 'useScopeState(key)', description: 'Reactive two-pane demo' },
+    { key: 'getValue', title: 'getValue', description: 'Non-reactive two-pane demo (refresh needed)' },
+    { key: 'getValues', title: 'getValues', description: 'Non-reactive two-pane demo (refresh needed)' },
   ];
 
   return (
@@ -52,50 +49,29 @@ export default function StateManagementDemo() {
         <div className="mt-12 space-y-12">
           {selected === 'useState' && (
             <section>
-              <UseStateDemo />
+              <TwoPaneUseStateDemo />
             </section>
           )}
 
           {selected === 'useScopeState' && (
             <section>
-              <UseScopeStateDemo />
+              <TwoPaneUseScopeStateDemo />
             </section>
           )}
 
           {selected === 'getValue' && (
             <section>
-              <GetValueDemo />
+              <TwoPaneGetValueDemo />
             </section>
           )}
 
-          {selected === 'useHydration' && (
-            <>
-              <section>
-                <UseHydrationDemo />
-              </section>
-              <section>
-                <div className="p-6 bg-white rounded-lg shadow-lg border">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-800">Auto-Hydration Component</h2>
-                  <p className="text-gray-600 mb-6">
-                    This component automatically hydrates with server data when it mounts.
-                  </p>
-                  <HydrationComponent />
-                </div>
-              </section>
-            </>
-          )}
-
-          {selected === 'reset' && (
+          {selected === 'getValues' && (
             <section>
-              <ResetDemo />
+              <TwoPaneGetValuesDemo />
             </section>
           )}
 
-          {selected === 'subscription' && (
-            <section>
-              <SubscriptionDemo />
-            </section>
-          )}
+          {/* Only three demos retained */}
         </div>
 
         {/* Footer */}
